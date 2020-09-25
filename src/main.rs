@@ -1,4 +1,12 @@
 
+mod client;
+mod server;
+mod comms;
+mod config;
+mod exp;
+mod fs_fuse;
+mod fs_winfsp;
+
 fn main() {
     // check for server, if none fork and re-execute
     
@@ -9,7 +17,7 @@ fn main() {
     // parse args:
     //   ls/read/write
 
-    println!("Hello, world!");
+    exp::show_fido_devices();
 
 
 }
