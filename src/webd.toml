@@ -1,0 +1,100 @@
+
+#
+# The identity block stores data that identifies
+# who you are and how you communicate.
+#
+
+
+[identity]
+# auth is required and may be one of:
+#  "fido", "file",
+auth = "fido"
+
+# key_file is required when auth == "file"
+key_file = "/path/to/id_file"
+
+
+
+
+
+# 
+# Peer block - list all the peers you want to connect to on startup.
+# 3rd party peers (peers of your peers) will be remembered
+# in the webd.db database.
+# 
+
+[[known_peer]]
+public_key = "todo figure out format + standardize"
+alias = "webd.jmcateer.pw development server"
+url = "udp://webd.jmcateer.pw"
+
+[[known_peer]]
+public_key = "todo figure out format + standardize"
+alias = "Bob from school"
+url = "udp://255.255.255.255"
+
+
+#
+# Share block - list all the local files you want to share with the world.
+# These will be read/write/list-able to your peers and 3rd party peers.
+#
+# Note that only the local machine may delete files in a share - remote users are
+# not presented any capability to remove files, the best they could to is write
+# zero data to a file to make it empty.
+#
+# Also note that webd must obey local file permissions - if you create
+# a read/write/list-able directory that contains a file "readme.txt"
+# and you have set the immutable bit using "chattr +i readme.txt"
+# public writes to "readme.txt" will fail even though the share allows
+# anyone to write to any file.
+#
+
+[[local_share]]
+alias = "My Files"
+description = "This is a directory anyone can read and write to, I use it to send memes to friends."
+local_directory = "/path/to/my/files/"
+# read permission allows others to read any file in the directory
+perm_read = true
+# write permission allows others to write to a file in the directory
+perm_write = true
+# list permission allows others to list the files within the directory
+perm_list = true
+# This limits the maximum number of files this share can have;
+# attempts to write to new files after exeeding this limit will fail.
+max_files = 100
+# This limits the total amount of data this share may contain;
+# after this much data exists under local_directory writes will fail.
+max_size = "2gb"
+# On any events (file read, file written, share listed)
+# this string will be executed. The binary needs to either be an absolute path
+# or appear on the system's $PATH.
+# All event details are in environment variables, which may be specified
+# in the list using the "$VAR_NAME" syntax. Escaping is not supported.
+event_script = ["dunstify", "$WEBD_EVENT_TYPE occured!"]
+
+
+
+[server]
+lang = "en,es"
+description = """
+This is an example server, it mostly has shares containing cat videos!
+"""
+
+# This file should contain an IP address on each line.
+# The file is watched and any IPv4 or IPv6 addresses
+# within will be ignored if they try to talk to the server.
+# Updating the file contents should update the ban list the server
+# uses within seconds.
+ban_file_ip = "/etc/my_bans.txt"
+
+# This file should contain a public key on each line.
+# Any clients bearing that identity will be ignored as soon
+# as they present the banned id to the server.
+ban_file_auth_id = "/etc/more_bans.txt"
+
+
+
+
+
+
+
