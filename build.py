@@ -12,7 +12,29 @@ def build(target):
 
 
 if __name__ == '__main__':
-  #build('x86_64-unknown-linux-gnu')
+  # Any 3rd party libraries that need updates will be cloned
+  # as sub-modules here
+  if not os.path.exists('libs'):
+    os.makedirs('libs')
+
+  # We keep a branch of mozilla's authenticator library
+  # here, but we add fixes so it can be compiled
+  # for windows using the GNU toolchain.
+
+  authenticator_lib = os.path.join('libs', 'authenticator')
+  if not os.path.exists(authenticator_lib):
+    subprocess.run([
+      'git', 'submodule', 'add', 'https://github.com/mozilla/authenticator-rs.git', authenticator_lib
+    ])
+  else:
+    # This exists, let's just pull from origin/main real quick
+    subprocess.run(['git', 'submodule', 'init'])
+    subprocess.run(['git', 'submodule', 'update'])
+    subprocess.run(['sh', '-c', f'cd "{authenticator_lib}" && git checkout main && git pull'])
+  
+  os.environ['PKG_CONFIG_ALLOW_CROSS'] = '1'
+
+  build('x86_64-unknown-linux-gnu')
   build('x86_64-unknown-linux-musl')
   build('x86_64-pc-windows-gnu')
   #build('x86_64-apple-darwin') # TODO figure out why my cross-copile toolchain is broken

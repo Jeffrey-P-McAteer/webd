@@ -9,8 +9,6 @@ checksum = "a4c527152e37cf757a3f78aae5a06fbeefdb07ccc535c980a3208ee3060dd544"
 [[package]]
 name = "authenticator"
 version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f1705a61db5ea860a40b54f649ee82ece942aef6bb91c6e86994e3b7d96597ab"
 dependencies = [
  "bitflags",
  "core-foundation",
