@@ -23,6 +23,9 @@ def read_in_version():
   return '0.0.0'
 
 def check_cmds():
+  if sys.version_info[0] < 3:
+    print('These scripts are written against python 3 APIs, you must use python 3. Current sys.version={}'.format(sys.version))
+    sys.exit(1)
   cmds = [
     'cargo', 'rustc', 'git', 'ssh', 'scp'
   ];
@@ -32,4 +35,8 @@ def check_cmds():
 def check_cmd(binary):
   if not shutil.which(binary):
     print("Warning, missing tool: {}".format(binary))
+
+def cmd(*args):
+  subprocess.run([x for x in args])
+
 
