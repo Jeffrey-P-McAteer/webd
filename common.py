@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import shutil
 
 # Stolen from https://stackoverflow.com/a/60878313, thanks for such a succinct and pythonic impl!
 def read_in_secrets():
@@ -20,4 +21,15 @@ def read_in_version():
         version_str = version_str.replace('"', '')
         return version_str
   return '0.0.0'
+
+def check_cmds():
+  cmds = [
+    'cargo', 'rustc', 'git', 'ssh', 'scp'
+  ];
+  for c in cmds:
+    check_cmd(c);
+
+def check_cmd(binary):
+  if not shutil.which(binary):
+    print("Warning, missing tool: {}".format(binary))
 

@@ -2,6 +2,8 @@
 
 import os, sys, subprocess
 
+from common import *
+
 def cmd(*args):
   subprocess.run([x for x in args])
 
@@ -12,6 +14,8 @@ def build(target):
 
 
 if __name__ == '__main__':
+  check_cmds();
+
   # Any 3rd party libraries that need updates will be cloned
   # as sub-modules here
   if not os.path.exists('libs'):
@@ -30,7 +34,8 @@ if __name__ == '__main__':
     # This exists, let's just pull from origin/main real quick
     subprocess.run(['git', 'submodule', 'init'])
     subprocess.run(['git', 'submodule', 'update'])
-    subprocess.run(['sh', '-c', f'cd "{authenticator_lib}" && git checkout main && git pull'])
+    subprocess.run(['git', 'checkout', 'main'], cwd=os.path.abspath(authenticator_lib))
+    subprocess.run(['git', 'pull'],             cwd=os.path.abspath(authenticator_lib))
   
   os.environ['PKG_CONFIG_ALLOW_CROSS'] = '1'
 

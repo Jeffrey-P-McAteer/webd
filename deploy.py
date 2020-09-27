@@ -4,10 +4,11 @@ import os
 import sys
 import subprocess
 
-from common import read_in_secrets
+from common import *
 
 def main(argv):
   subprocess.run([sys.executable, 'build.py']).check_returncode()
+  check_cmds()
   read_in_secrets()
 
   if not 'DEPLOY_RSA_KEY' in os.environ:
